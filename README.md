@@ -22,9 +22,11 @@ Here is my quick solution.
 * [jekyll](https://github.com/mojombo/jekyll) `gem install jekyll`
 * [juicer](https://github.com/cjohansen/juicer) `gem install juicer`
 
-### Usage:
+### Instructions:
 
-Put the css files you want to minify into a root/css folder
+1. Put the CssMinify.rb plugin into your `<root>/_plugins` directory so Jekyll can load it
+
+2. Put the css files you want to minify into a `<root>/css` folder
 
     root
       css
@@ -33,9 +35,11 @@ Put the css files you want to minify into a root/css folder
         mobile.css
         ...
       
-In your layout file, link to the minified css file, /css/site.min.css:
+3. In your layout file, link to the minified css file, /css/site.min.css:
 
 `<link rel="stylesheet" href="/css/site.min.css">`
+
+4. Compile your site `jekyll`
 
 ### Technical:
 

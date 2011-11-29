@@ -1,15 +1,7 @@
-Plugins for Jekyll
-==================
-
-I'll be adding the plugins I use / develop / fork for the spiffy static site generator, [Jekyll](http://jekyllrb.com).
-
-Put in \_plugins directory and you're good to go...maybe
-Additional info below!
-
 CssMinify
----------
+=========
 
-Generates minified CSS using the [juicer gem](http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool).
+Generates minified CSS using the [juicer gem](http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool) for use with the static site generator [Jekyll](http://jekyllrb.com).
 It's basically a wrapper for juicer that is called automatically when the site is compiled.
 
 This came about when I wanted to minify some CSS but couldn't find any way to automatically do it, using Jekyll.
@@ -22,7 +14,8 @@ Here is my quick solution.
 * [jekyll](https://github.com/mojombo/jekyll) `gem install jekyll`
 * [juicer](https://github.com/cjohansen/juicer) `gem install juicer`
 
-### Instructions:
+Instructions:
+-------------
 
 1. Put the CssMinify.rb plugin into your `<root>/_plugins` directory so Jekyll can load it
 

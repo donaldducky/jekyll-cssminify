@@ -1,4 +1,6 @@
 module Jekyll
+  MINIFIED_FILENAME = Time.new.strftime("%Y%m%d%H%M") + '.min.css'
+
   # use this as a workaround for getting cleaned up
   # reference: https://gist.github.com/920651
   class CssMinifyFile < StaticFile
@@ -12,13 +14,12 @@ module Jekyll
     safe true
     def generate(site)
       relative_dir = 'css'
-      minified_file = 'site.min.css'
 
       css_files = get_css_files(site, relative_dir)
-      output_file = File.join(site.config['destination'], relative_dir, minified_file)
+      output_file = File.join(site.config['destination'], relative_dir, MINIFIED_FILENAME)
       minify_css(css_files, output_file)
 
-      site.static_files << CssMinifyFile.new(site, site.source, relative_dir, minified_file)
+      site.static_files << CssMinifyFile.new(site, site.source, relative_dir, MINIFIED_FILENAME)
     end
 
     # read the css dir for the css files to compile
@@ -40,4 +41,17 @@ module Jekyll
       system(juice_cmd)
     end
   end
+
+  class CssMinifyLinkTag < Liquid::Tag
+
+    def initialize(tag_name, text, tokens)
+      super
+    end
+
+    def render(context)
+      MINIFIED_FILENAME
+    end
+  end
 end
+
+Liquid::Template.register_tag('minified_css_file', Jekyll::CssMinifyLinkTag)

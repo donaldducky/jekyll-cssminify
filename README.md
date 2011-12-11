@@ -28,15 +28,15 @@ Instructions:
         mobile.css
         ...
       
-3. In your layout file, link to the minified css file, /css/site.min.css:
+3. In your layout file, link to the minified css file by using the parameter {% minified_css_file %}:
 
-`<link rel="stylesheet" href="/css/site.min.css">`
+`<link rel="stylesheet" href="/css/{% minified_css_file %}">`
 
 4. Compile your site `jekyll`
 
 ### Technical:
 
-Reads all the css files in the css directory and creates a site.min.css into your site's destination directory.
+Reads all the css files in the css directory and creates a single, minified file into your site's destination directory. The file name is based on the current date and time, in order to ensure that any updates are automatically cache-busted.
 
 For example:
 
@@ -54,7 +54,7 @@ When the site is compiled using jekyll, the minified css file will be in the css
     root
       _site
         css
-          site.min.css
+          201112111214.min.css
 
 What this plugin does is equivalent to (using the above example):
 

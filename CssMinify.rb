@@ -13,13 +13,26 @@ module Jekyll
   class CssMinifyGenerator < Generator
     safe true
     def generate(site)
-      relative_dir = 'css'
-
-      css_files = get_css_files(site, relative_dir)
-      output_file = File.join(site.config['destination'], relative_dir, MINIFIED_FILENAME)
-      minify_css(css_files, output_file)
-
-      site.static_files << CssMinifyFile.new(site, site.source, relative_dir, MINIFIED_FILENAME)
+	  load_configuration
+	
+	  css_dir = 'css'
+	  destination_dir = File.join(site.config['destination'], css_dir)
+	
+	  unless @destination == nil
+		puts("setting")
+		destination_dir = @destination
+	  end
+	
+	  if @files_to_minify == nil
+		css_files = get_css_files(site, css_dir)
+	    output_file = File.join(destination_dir, MINIFIED_FILENAME)
+	    minify_css(css_files, output_file)
+		site.static_files << CssMinifyFile.new(site, site.source, css_dir, MINIFIED_FILENAME)
+	  else
+		output_file = File.join(destination_dir, MINIFIED_FILENAME)
+	    minify_css(@files_to_minify, output_file)
+		site.static_files << CssMinifyFile.new(site, site.source, css_dir, MINIFIED_FILENAME)
+	  end
     end
 
     # read the css dir for the css files to compile
@@ -40,6 +53,15 @@ module Jekyll
       puts juice_cmd
       system(juice_cmd)
     end
+
+	# Load configuration from CssMinify.yml
+    # Return true if all values are set and not emtpy
+    def load_configuration
+       config = YAML.load_file('CssMinify.yml') rescue nil
+       return false unless config
+       @files_to_minify = config['files']
+	   @destination = config['destination']
+     end
   end
 
   class CssMinifyLinkTag < Liquid::Tag

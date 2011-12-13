@@ -14,12 +14,18 @@ Here is my quick solution.
 * [jekyll](https://github.com/mojombo/jekyll) `gem install jekyll`
 * [juicer](https://github.com/cjohansen/juicer) `gem install juicer`
 
-Instructions:
--------------
+# Installation
 
-1. Put the CssMinify.rb plugin into your `<root>/_plugins` directory so Jekyll can load it
+1. Place the CssMinify.rb plugin into your `<root>/_plugins` directory so that Jekyll can load it
+2. Create a new path `<root>/css`.
+3. Follow the Usage instructions below.
+4. Compile your site with `jekyll`
 
-2. Put the css files you want to minify into a `<root>/css` folder
+# Usage
+
+## Specifying source files
+
+The simplest way of specifying source files for minification is to place them all into a `<root>/css` folder
 
     root
       css
@@ -27,18 +33,36 @@ Instructions:
         site.css
         mobile.css
         ...
-      
-3. In your layout file, link to the minified css file by using the parameter {% minified_css_file %}:
+
+Alternatively, you can create a configuration called 'CssMinify.yml' in your `<root>` directory. In this configuration file you can use the following syntax to list source files:
+
+    files: [
+      'css/reset.css',
+      'css/file1.css',
+      'other-folder/file2.css'
+    ]
+
+Note that this second method also allows you to specify the order in which files should be added to the output. This is especially handy if you want to make sure that your reset file is always first.
+   
+## Updating your HTML files
+
+As the filename for the generated CSS output changes each time, you need to update your layout file. Simply, link to the minified css file by using the parameter {% minified_css_file %}:
 
 `<link rel="stylesheet" href="/css/{% minified_css_file %}">`
 
-4. Compile your site `jekyll`
+## Specifying an alternative output destination
 
-### Technical:
+If, for whatever reason, you wish to override the default output location for your generated, minified file. Create a configuration called 'CssMinify.yml' in your `<root>` directory. In this configuration file you can use the following syntax to set a destination directory (relative to the Jekyll site output directory):
 
-Reads all the css files in the css directory and creates a single, minified file into your site's destination directory. The file name is based on the current date and time, in order to ensure that any updates are automatically cache-busted.
+`destination: 'alternative_location/css/'`
 
-For example:
+# Overview
+
+Reads all the css files in the css directory or CssMinify.yml configuration file and creates a single, minified file into your site's destination directory (unless overridden in the configuration file). 
+
+The file name is based on the current date and time, in order to ensure that any updates are automatically cache-busted.
+
+Using the default settings, for example:
 
     root
       _layouts
@@ -60,15 +84,10 @@ What this plugin does is equivalent to (using the above example):
 
 `juicer merge -f css/style.css css/syntax.css -o _site/css/site.min.css`
 
-### Note:
+# TODO
 
 This plugin is in an early stage and put together quickly with my limited Ruby knowledge. If there are any suggestions or criticisms about the code, open up an issue :D
 
-### TODO:
-
 * there's an issue where `jekyll --server --auto` seems to constantly regenerate files, could be because of the hackery used to keep jekyll from blowing away the minified file (see: https://github.com/mojombo/jekyll/issues/268)
-* make the pre-minified css location configurable
 * have a nice way to include all the non-minified css, since it doesn't always have to be minifed
-* make the minified location configurable
-* option to use static file versioning (cache busters, feature supported by juicer)
 

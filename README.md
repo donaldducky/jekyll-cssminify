@@ -52,9 +52,9 @@ As the filename for the generated CSS output changes each time, you need to upda
 
 ## Specifying an alternative output destination
 
-If, for whatever reason, you wish to override the default output location for your generated, minified file. Create a configuration called 'CssMinify.yml' in your `<root>` directory. In this configuration file you can use the following syntax to set a destination directory:
+If, for whatever reason, you wish to override the default output location for your generated, minified file. Create a configuration called 'CssMinify.yml' in your `<root>` directory. In this configuration file you can use the following syntax to set a destination directory (relative to the Jekyll site output directory):
 
-`destination: '/alternative_location/css/'`
+`destination: 'alternative_location/css/'`
 
 # Overview
 

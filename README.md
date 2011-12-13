@@ -48,13 +48,13 @@ Note that this second method also allows you to specify the order in which files
 
 As the filename for the generated CSS output changes each time, you need to update your layout file. Simply, link to the minified css file by using the parameter {% minified_css_file %}:
 
-`<link rel="stylesheet" href="/css/{% minified_css_file %}">`
+`<link rel="stylesheet" href="{% minified_css_file %}">`
 
 ## Specifying an alternative output destination
 
 If, for whatever reason, you wish to override the default output location for your generated, minified file. Create a configuration called 'CssMinify.yml' in your `<root>` directory. In this configuration file you can use the following syntax to set a destination directory (relative to the Jekyll site output directory):
 
-`destination: 'alternative_location/css/'`
+`css_destination: '/alternative_location/css/'`
 
 # Overview
 

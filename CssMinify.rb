@@ -12,22 +12,18 @@ module Jekyll
   # minify css files
   class CssMinifyGenerator < Generator
     safe true
+
     def generate(site)
-      load_configuration
+      config = Jekyll::CssMinifyGenerator.get_config
 
-      css_dir = 'css'
-      destination_dir = File.join(site.config['destination'], css_dir)
+      files_to_minify = config['files'] || get_css_files(site, config['css_source'])
 
-      unless @destination == nil
-        destination_dir = File.join(site.config['destination'], @destination)
-      end
-
-      if @files_to_minify == nil
-        @files_to_minify = get_css_files(site, css_dir)
-      end
-      output_file = File.join(destination_dir, MINIFIED_FILENAME)
-      minify_css(@files_to_minify, output_file)
-      site.static_files << CssMinifyFile.new(site, site.source, css_dir, MINIFIED_FILENAME)
+      output_dir = File.join(site.config['destination'], config['css_destination'])
+      output_file = File.join(output_dir, MINIFIED_FILENAME)
+      # need to create destination dir if it doesn't exist
+      FileUtils.mkdir_p(output_dir)
+      minify_css(files_to_minify, output_file)
+      site.static_files << CssMinifyFile.new(site, site.source, config['css_destination'], MINIFIED_FILENAME)
     end
 
     # read the css dir for the css files to compile
@@ -50,23 +46,30 @@ module Jekyll
     end
 
     # Load configuration from CssMinify.yml
-    # Return true if all values are set and not emtpy
-    def load_configuration
-       config = YAML.load_file('CssMinify.yml') rescue nil
-       return false unless config
-       @files_to_minify = config['files']
-       @destination = config['destination']
-     end
+    def self.get_config
+      if @config == nil
+        @config = {
+          'css_source' => 'css', # relative to the route
+          'css_destination' => '/css' # relative to site.config['destination']
+        }
+        config = YAML.load_file('CssMinify.yml') rescue nil
+        if config.is_a?(Hash)
+          @config = @config.merge(config)
+        end
+      end
+
+      return @config
+    end
   end
 
   class CssMinifyLinkTag < Liquid::Tag
-
     def initialize(tag_name, text, tokens)
       super
     end
 
     def render(context)
-      MINIFIED_FILENAME
+      config = Jekyll::CssMinifyGenerator.get_config
+      File.join(config['css_destination'], MINIFIED_FILENAME)
     end
   end
 end

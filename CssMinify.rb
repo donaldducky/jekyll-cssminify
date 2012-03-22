@@ -1,5 +1,5 @@
 module Jekyll
-  MINIFIED_FILENAME = Time.new.strftime("%Y%m%d%H%M") + '.min.css'
+  $minified_filename = 'min.css'
 
   # use this as a workaround for getting cleaned up
   # reference: https://gist.github.com/920651
@@ -18,12 +18,19 @@ module Jekyll
 
       files_to_minify = config['files'] || get_css_files(site, config['css_source'])
 
+      last_modified = files_to_minify.reduce( Time.at(0) ) do |latest,filepath|
+        modified = File.mtime(filepath)
+        modified > latest ? modified : latest
+      end
+      $minified_filename = last_modified.strftime("%Y%m%d%H%M") + '.' + $minified_filename
+
       output_dir = File.join(site.config['destination'], config['css_destination'])
-      output_file = File.join(output_dir, MINIFIED_FILENAME)
+      output_file = File.join(output_dir, $minified_filename)
+
       # need to create destination dir if it doesn't exist
       FileUtils.mkdir_p(output_dir)
       minify_css(files_to_minify, output_file)
-      site.static_files << CssMinifyFile.new(site, site.source, config['css_destination'], MINIFIED_FILENAME)
+      site.static_files << CssMinifyFile.new(site, site.source, config['css_destination'], $minified_filename)
     end
 
     # read the css dir for the css files to compile
@@ -69,7 +76,7 @@ module Jekyll
 
     def render(context)
       config = Jekyll::CssMinifyGenerator.get_config
-      File.join(config['css_destination'], MINIFIED_FILENAME)
+      File.join(config['css_destination'], $minified_filename)
     end
   end
 end

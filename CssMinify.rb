@@ -1,5 +1,5 @@
 module Jekyll
-  $minified_filename = 'min.css'
+  $minified_filename = ''
 
   # use this as a workaround for getting cleaned up
   # reference: https://gist.github.com/920651
@@ -22,7 +22,8 @@ module Jekyll
         modified = File.mtime(filepath)
         modified > latest ? modified : latest
       end
-      $minified_filename = last_modified.strftime("%Y%m%d%H%M") + '.' + $minified_filename
+      # reset the minified filename
+      $minified_filename = last_modified.strftime("%Y%m%d%H%M") + '.min.css'
 
       output_dir = File.join(site.config['destination'], config['css_destination'])
       output_file = File.join(output_dir, $minified_filename)

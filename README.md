@@ -2,7 +2,7 @@ CssMinify
 =========
 
 Generates minified CSS using the [juicer gem](http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool) for use with the static site generator [Jekyll](http://jekyllrb.com).
-It's basically a wrapper for juicer that is called automatically when the site is compiled.
+It's basically a wrapper for juicer (which in turn makes use of [YUI compressor](http://developer.yahoo.com/yui/compressor/)) that is called automatically when the site is compiled.
 
 This came about when I wanted to minify some CSS but couldn't find any way to automatically do it, using Jekyll.
 I did a few quick searches for a plugin or liquid filter, but came up with nil.
